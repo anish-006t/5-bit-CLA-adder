@@ -1,1 +1,145 @@
-a
+# 5-Bit Carry Lookahead Adder (CLA) Design & Layout
+
+A complete implementation of a 5-bit Carry Lookahead Adder using TSMC 180nm technology, including circuit simulation and physical layout design.
+
+## Project Overview
+
+This project presents a full-custom design of a 5-bit Carry Lookahead Adder (CLA), a fast arithmetic circuit that reduces propagation delay compared to ripple carry adders. The design includes:
+
+- **Circuit Design & Simulation**: SPICE-based pre-layout and post-layout simulations
+- **Physical Layout**: Magic tool-based mask design for TSMC 180nm process
+- **Components**: Custom designs for basic logic gates and adder cells
+
+## Project Structure
+
+### 📁 Magic Files (Layout Design)
+Layout mask designs created using Magic tool for TSMC 180nm technology:
+
+- **CLA.mag / CLA.ext** - 5-bit Carry Lookahead Adder main layout and extracted view
+- **and_2.mag / and_2.ext** - 2-input AND gate layout and parasitic extraction
+- **xor.mag / xor.ext** - XOR gate layout and parasitic extraction
+- **inv.mag / inv.ext** - Inverter/NOT gate layout and parasitic extraction
+- **tspc.mag / tspc.ext** - TSPC (True Single Phase Clock) latch design
+- **Mcc.mag / Mcc.ext** - Multiplexer/Cross-coupled latch variant
+- **SCN6M_DEEP.09.tech27** - TSMC 180nm technology file
+
+### 📁 Ngspice Files (Simulation)
+SPICE netlist files for pre-layout and post-layout circuit simulation:
+
+#### Netlists
+- **CLA.spice** - Main 5-bit CLA SPICE netlist
+- **gates.cir** - Basic logic gates (AND, XOR, INV) definitions
+- **CLA.cir** - CLA complete circuit file with testbench
+
+#### Individual Component Files
+- **and_2.spice** - 2-input AND gate netlist
+- **xor.spice** - XOR gate netlist
+- **inv.spice** - Inverter gate netlist
+- **tspc.spice** - TSPC latch netlist
+- **tspcff.cir** - TSPC flip-flop variant
+- **Mcc.spice** - Multiplexer cell netlist
+
+#### Technology & Configuration
+- **TSMC_180nm.txt** - TSMC 180nm process technology parameters and models
+
+### 📄 Documentation
+- **README.md** - This file
+
+## Circuit Design Details
+
+### Carry Lookahead Adder
+The CLA improves addition speed by calculating carries in parallel using generate (G) and propagate (P) signals:
+- **G = A·B** (carry generate)
+- **P = A⊕B** (carry propagate)
+
+### Advantages over Ripple Carry Adder
+- Reduced delay: O(log n) vs O(n)
+- Higher throughput for multi-bit additions
+- Suitable for high-speed arithmetic operations
+
+### Technology Specifications
+- **Process**: TSMC 180nm (0.18µm)
+- **Supply Voltage**: Standard (typically 1.8V)
+- **Temperature Range**: 0°C to 70°C (typical)
+
+## How to Use
+
+### Running Pre-Layout Simulations
+1. Use ngspice to run the pre-layout netlists:
+   ```bash
+   ngspice CLA.spice
+   ```
+
+2. Alternatively, use circuit files with testbenches:
+   ```bash
+   ngspice CLA.cir
+   ```
+
+### Viewing & Editing Layouts
+1. Open Magic tool and load layout files:
+   ```bash
+   magic -T SCN6M_DEEP.09.tech27 CLA.mag
+
+   ```
+
+2. To extract parasitic information:
+   ```bash
+   extract all
+   ext2spice
+   ```
+
+### Post-Layout Simulation
+1. Extract RC parasitic data from layouts using Magic
+2. Run simulations with extracted parasitic files (.ext)
+3. Compare pre-layout and post-layout results to verify timing
+
+## Design Hierarchy
+
+```
+CLA (5-bit Adder)
+├── AND gates (and_2)
+├── XOR gates (xor)
+├── Inverters (inv)
+├── TSPC latches (tspc)
+└── Multiplexers/Latches (Mcc)
+```
+
+## Key Files for Simulation Testing
+
+- **CLA.spice** - Primary simulation netlist
+- **gates.cir** - Gate definitions for circuit simulation
+- **TSMC_180nm.txt** - Process technology models
+
+## Tools Required
+
+- **Magic** - For layout design and parasitic extraction
+- **Ngspice** - For circuit simulation and verification
+- **TSMC 180nm PDK** - Process Design Kit
+
+## Performance Characteristics
+
+The 5-bit CLA offers improved performance over ripple carry adders:
+- **Critical Path**: Reduced due to parallel carry computation
+- **Area**: Slightly larger than ripple carry (additional logic for carry lookahead)
+- **Power**: Comparable to ripple carry for nominal operation
+
+## Future Enhancements
+
+- Extended bit-width implementations (8, 16, 32-bit)
+- Variable voltage operation analysis
+- Automated layout generation and optimization
+- Power consumption analysis
+- Timing characterization across PVT corners
+
+## Notes
+
+- All designs follow TSMC 180nm standard cell library conventions
+- Extract (.ext) files contain parasitic capacitance and resistance information
+- Pre-layout and post-layout simulations should be compared for design closure
+
+## Author & License
+
+Design Project: 5-bit CLA using TSMC 180nm Technology
+
+For questions or contributions, please refer to the project repository.
+
